@@ -2,10 +2,10 @@
 
 #### Step 1: Environment Setup
 1. **Create a GitHub Repository**: This will store your project's code.
-2. **Install Necessary Tools**: Includes Python, Flask (a lightweight WSGI web application framework), and requests library for making HTTP requests.
+2. **Install Necessary Tools**: Python, Flask (a lightweight WSGI web application framework), and requests library for making HTTP requests.
 
 #### Step 2: Register Application with Spotify
-1. Go to the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/) and log in.
+1. Log into [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/).
 2. Create an app to obtain your `Client ID` and `Client Secret`.
 3. Set the Redirect URI to point to your local or production environment (e.g., `http://localhost:5000/callback` for development).
 
@@ -31,9 +31,7 @@
    - Ensure that your frontend code makes calls to the correct backend URL (your Heroku app URL).
 
 #### Step 7: Documentation and Publishing
-1. **Document Your Project**:
-   - Write a clear `README.md` that explains what the app does, how to set it up, and how to run it.
-2. **Push to GitHub**:
+1. **Push to GitHub**:
    - Push all your code to your GitHub repository, excluding sensitive credentials which should be managed through environment variables or config files.
 
 This setup creates a full-fledged project utilizing Spotify's data, and it’s great for your GitHub portfolio as it showcases your skills with APIs, Python, Flask, and basic frontend development. If you need any specific code snippets or further clarification on any step, just let me know!
