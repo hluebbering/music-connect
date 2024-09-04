@@ -33,27 +33,19 @@
 
    ```
 
-2. **Implement Spotify Authentication**:
-
-   1. **OAuth 2.0 Flow**:Redirect user to Spotify’s authorization URL, where they log in. Afterward, Spotify redirects them back to specified redirect URI with an authorization code.
-   2. **Set Up Environment Variables:** Store sensitive info such as Spotify Client ID and Secret securely. Use environment variables or a .env file (handled by python-dotenv package).
-   3. **Implement Login and Callback Routes:**
-
-
-
-Spotify uses OAuth 2.0 for authentication. The process involves redirecting the user to Spotify’s authorization URL, where they log in. Afterward, Spotify redirects them back to your specified redirect URI with an authorization code.
-You exchange this code for an access token that allows you to make requests to Spotify's API on behalf of the user.
+2. **Implement Spotify Authentication**: 
+   1. **OAuth 2.0 Flow**: Authentication redirects user to Spotify’s authorization URL, where they log in. After, Spotify redirects them back to specified redirect URI with an authorization code. You exchange this code for an access token.
+   2. **Set Up Environment Variables:** Store sensitive info such as Spotify Client ID and Secret securely. Use environment variables or a .env file (via `python-dotenv` package).
+   3. **Implement Login and Callback Routes.**
+   4. **Run Flask App:** Run by executing the `app.py` file. Navigate to *http://localhost:5000/login* to start authentication process.
 
 
 
 
-
-
-
-
-#### Step 4: Fetching Data from Spotify
-1. Use the access token to make requests to Spotify’s Web API.
-2. Fetch the user's top tracks and artists by making GET requests to endpoints like `/v1/me/top/tracks`.
+### Step 4: Fetching Data from Spotify
+After you've authenticated the user and obtained an access token, you can use this token to make requests to Spotify's API to fetch data such as the user's top tracks and artists.
+1. **Use access token to make requests to Spotify’s Web API.**
+2. **Define Routes in Your Flask App to Fetch Spotify Data:** Use `/get_data` route to fetch user's top tracks and artists by making GET requests to endpoints like `/v1/me/top/tracks`.
 
 #### Step 5: Frontend Development
 1. **Create HTML/CSS/JavaScript Files**: Build a simple user interface that displays the data fetched from the backend.
