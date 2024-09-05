@@ -1,14 +1,15 @@
 ## Steps to Create Web App
 
-### Part 1. Environment Setup
+### Step 1. Environment Setup
 1. **Create a GitHub Repository**: This will store your project's code.
 2. **Install Necessary Tools**: Python, Flask (a lightweight WSGI web application framework), and requests (HTTP) library.
 
+
+
 ### Step 2: Register Application with Spotify
 1. Log into [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/).
-2. Create an app to obtain your `Client ID` and `Client Secret`.
+2. Create an app to obtain `Client ID` and `Client Secret`.
 3. Set the Redirect URI to point to your local or production environment (e.g., `http://localhost:5000/callback` for development).
-
 
 
 
@@ -30,7 +31,6 @@
 
    if __name__ == '__main__':
     app.run(debug=True)
-
    ```
 
 2. **Implement Spotify Authentication**: 
@@ -40,14 +40,17 @@
    4. **Run Flask App:** Run by executing the `app.py` file. Navigate to *http://localhost:5000/login* to start authentication process.
 
 
-
+----
 
 ### Step 4: Fetching Data from Spotify
 After you've authenticated the user and obtained an access token, you can use this token to make requests to Spotify's API to fetch data such as the user's top tracks and artists.
 1. **Use access token to make requests to Spotify’s Web API.**
 2. **Define Routes in Your Flask App to Fetch Spotify Data:** Use `/get_data` route to fetch user's top tracks and artists by making GET requests to endpoints like `/v1/me/top/tracks`.
 
-#### Step 5: Frontend Development
+
+### Step 5: Frontend Development
+Create a basic frontend -using HTML, CSS, and JavaScript- that communicates with Flask's backend to retrieve Spotify data and display it to the user.
+
 1. **Create HTML/CSS/JavaScript Files**: Build a simple user interface that displays the data fetched from the backend.
 2. **JavaScript Fetch API**: Use JavaScript to connect to your Flask backend, retrieve data, and update the frontend dynamically.
 
