@@ -1,6 +1,6 @@
 ## Steps to Create Web App
 
-### Step 1: Environment Setup
+### Part 1. Environment Setup
 1. **Create a GitHub Repository**: This will store your project's code.
 2. **Install Necessary Tools**: Python, Flask (a lightweight WSGI web application framework), and requests (HTTP) library.
 
