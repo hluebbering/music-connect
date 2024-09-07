@@ -209,8 +209,6 @@ python-json-logger==2.0.7
 python-multipart==0.0.9
 pytorch_revgrad==0.2.0
 pytz==2024.1
-pywin32==306
-pywinpty==2.0.13
 PyYAML==6.0.1
 pyzmq==25.1.2
 queuelib==1.6.2
