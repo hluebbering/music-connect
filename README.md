@@ -130,3 +130,10 @@ git push -u origin main
 git add .
 git commit -am "make it better"
 git push heroku main
+
+
+
+heroku apps:rename music-connect
+git remote rm heroku
+heroku git:remote -a new-example-app
+heroku git:remote -a music-connect
