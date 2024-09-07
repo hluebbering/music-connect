@@ -20,10 +20,16 @@ CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
 REDIRECT_URI = os.getenv('REDIRECT_URI')
 
 
-
 @app.route('/')
 def home():
+    if 'access_token' not in session:
+        return redirect(url_for('login'))
     return render_template('index.html')
+
+
+# @app.route('/')
+# def home():
+#     return render_template('index.html')
 
 @app.route('/login')
 def login():
