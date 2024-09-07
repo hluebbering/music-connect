@@ -1,19 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Spotify Data Viewer</title>
-    <link rel="stylesheet" href="/static/styles.css">
-</head>
-<body>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <!-- Inside index.html -->
+    {% if data %}
+    <h1>Top Tracks</h1>
+    <ul>
+      {% for track in data.items %}
+      <li>{{ track.name }} by {{ track.artists[0].name }}</li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>No data available.</p>
+    {% endif %}
+
     <h1>My Spotify Favorites</h1>
     <div id="data-display">
-        <h2>Top Tracks</h2>
-        <ul id="top-tracks"></ul>
-        <h2>Top Artists</h2>
-        <ul id="top-artists"></ul>
+      <h2>Top Tracks</h2>
+      <ul id="top-tracks"></ul>
+      <h2>Top Artists</h2>
+      <ul id="top-artists"></ul>
     </div>
     <script src="/static/script.js"></script>
-</body>
+  </body>
 </html>

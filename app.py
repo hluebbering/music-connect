@@ -27,9 +27,34 @@ def home():
     return render_template('index.html')
 
 
-# @app.route('/')
-# def home():
-#     return render_template('index.html')
+@app.route('/')
+def home():
+    if 'access_token' not in session:
+        return redirect(url_for('login'))
+    # Fetch data
+    data = fetch_spotify_data()  # You need to implement this function
+    return render_template('index.html', data=data)
+
+
+def fetch_spotify_data():
+    access_token = session.get('access_token')
+    if not access_token:
+        logging.warning("Access token not found in session.")
+        return None
+
+    headers = {'Authorization': f'Bearer {access_token}'}
+    top_tracks_url = 'https://api.spotify.com/v1/me/top/tracks'
+    response = requests.get(top_tracks_url, headers=headers)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        logging.error("Failed to fetch data from Spotify.")
+        return None
+
+
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 @app.route('/login')
 def login():
@@ -74,7 +99,10 @@ def callback():
     access_token = token_response.json().get('access_token')
     session['access_token'] = access_token
     logging.info("Access token successfully received and stored.")
-    return redirect(url_for('display_data'))
+
+    # After storing the access_token in session
+    # return redirect(url_for('display_data'))
+    return redirect(url_for('home'))
 
 
 
