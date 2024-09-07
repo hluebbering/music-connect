@@ -120,6 +120,9 @@ heroku config:set REDIRECT_URI="https://fierce-sands-53854-09e86a071da9.herokuap
 
 
 set HEROKU_API_KEY=HRKU-d42b4a33-2453-49fc-ac24-b33478894909
+set HEROKU_API_KEY=HRKU-d42b4a33-2453-49fc-ac24-b33478894909
+heroku config:set REDIRECT_URI="https://music-connect.herokuapp.com/callback" --app music-connect
+
 git push heroku main
 heroku logs --tail --app fierce-sands-53854
 
