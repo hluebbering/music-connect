@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
-    fetch('/get_data')
+    fetch('https://music-connect.herokuapp.com/get_data')
+    // fetch('/get_data')
         .then(response => response.json())
         .then(data => {
             const tracks = data.top_tracks.items;

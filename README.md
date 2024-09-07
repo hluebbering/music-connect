@@ -136,7 +136,11 @@ git push heroku main
 
 
 
+
 heroku apps:rename music-connect
 git remote rm heroku
 heroku git:remote -a new-example-app
 heroku git:remote -a music-connect
+
+
+heroku logs --tail --app music-connect
