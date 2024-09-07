@@ -12,8 +12,8 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %
 
 app = Flask(__name__)
 app.secret_key = "ynx2ftyq"
-CORS(app)  # This will enable CORS for all domains on all routes
 app.config['DEBUG'] = False
+CORS(app)  # This will enable CORS for all domains on all routes
 
 # Your Spotify Client ID and Secret
 CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
