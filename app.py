@@ -12,6 +12,7 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %
 app = Flask(__name__)
 app.secret_key = "ynx2ftyq"
 CORS(app)  # This will enable CORS for all domains on all routes
+app.config['DEBUG'] = False
 
 # Your Spotify Client ID and Secret
 CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
@@ -125,4 +126,3 @@ def display_data():
 if __name__ == '__main__':
     app.run(debug=True)
 
-$ heroku login
