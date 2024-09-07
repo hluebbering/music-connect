@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Replace 'your-heroku-app-name' with your actual Heroku app name
     // fetch('/get_data')
-    const backendUrl = 'https://your-heroku-app-name.herokuapp.com/get_data';
+    const backendUrl = 'https://fierce-sands-53854.herokuapp.com/get_data';
     fetch(backendUrl)
         .then(response => {
             if (!response.ok) {
