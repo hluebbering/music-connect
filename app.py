@@ -20,36 +20,20 @@ CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
 REDIRECT_URI = os.getenv('REDIRECT_URI')
 
 
-# @app.route('/')
-# def home():
-#     if 'access_token' not in session:
-#         return redirect(url_for('login'))
-#     return render_template('index.html')
-
-
 @app.route('/')
 def home():
     if 'access_token' not in session:
         return redirect(url_for('login'))
-    # Fetch data
-    data = fetch_spotify_data()  # You need to implement this function
-    return render_template('index.html', data=data)
+    return render_template('index.html')
 
 
-def fetch_spotify_data():
-    access_token = session.get('access_token')
-    if not access_token:
-        logging.warning("Access token not found in session.")
-        return None
-
-    headers = {'Authorization': f'Bearer {access_token}'}
-    top_tracks_url = 'https://api.spotify.com/v1/me/top/tracks'
-    response = requests.get(top_tracks_url, headers=headers)
-    if response.status_code == 200:
-        return response.json()
-    else:
-        logging.error("Failed to fetch data from Spotify.")
-        return None
+# @app.route('/')
+# def home():
+#     if 'access_token' not in session:
+#         return redirect(url_for('login'))
+#     # Fetch data
+#     data = fetch_spotify_data()  # You need to implement this function
+#     return render_template('index.html', data=data)
 
 
 
