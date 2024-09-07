@@ -1,3 +1,4 @@
+import time
 from flask import Flask, redirect, request, session, jsonify, url_for, render_template
 from flask_cors import CORS
 import requests
@@ -18,6 +19,33 @@ app.config['DEBUG'] = False
 CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
 CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
 REDIRECT_URI = os.getenv('REDIRECT_URI')
+
+
+
+
+@app.route('/refresh_token')
+def refresh_token():
+    refresh_token = session.get('refresh_token')
+    if not refresh_token:
+        return jsonify({'error': 'Refresh token not found'}), 401
+
+    response = requests.post(
+        'https://accounts.spotify.com/api/token',
+        data={
+            'grant_type': 'refresh_token',
+            'refresh_token': refresh_token,
+            'client_id': os.getenv('SPOTIFY_CLIENT_ID'),
+            'client_secret': os.getenv('SPOTIFY_CLIENT_SECRET')
+        }
+    )
+
+    if response.status_code != 200:
+        return jsonify({'error': 'Failed to refresh token'}), response.status_code
+
+    new_tokens = response.json()
+    session['access_token'] = new_tokens.get('access_token')
+    return jsonify({'message': 'Token refreshed successfully'})
+
 
 
 @app.route('/')
@@ -42,6 +70,13 @@ def login():
     auth_url = f"https://accounts.spotify.com/authorize?client_id={CLIENT_ID}&response_type=code&redirect_uri={REDIRECT_URI}&scope=user-top-read"
     app.logger.debug(f"Redirecting to Spotify auth URL: {auth_url}")
     return redirect(auth_url)
+
+
+
+
+
+
+
 
 
 @app.route('/callback')
@@ -76,10 +111,16 @@ def callback():
         error_message = error_info.get('error_description', 'Failed to retrieve access token')
         logging.error(f"Token exchange failed: {error_message}, Status Code: {token_response.status_code}")
         return jsonify({'error': error_message, 'error_details': error_info}), token_response.status_code
-
-    access_token = token_response.json().get('access_token')
-    session['access_token'] = access_token
-    logging.info("Access token successfully received and stored.")
+    
+    token_info = token_response.json()
+    session['access_token'] = token_info.get('access_token')
+    session['refresh_token'] = token_info.get('refresh_token')
+    session['token_expires_in'] = time.time() + token_info.get('expires_in')
+    logging.info("Access token and refresh token successfully received and stored.")
+    
+    #access_token = token_response.json().get('access_token')
+    # session['access_token'] = access_token
+    # logging.info("Access token successfully received and stored.")
 
     # After storing the access_token in session
     # return redirect(url_for('display_data'))
@@ -140,3 +181,4 @@ def display_data():
 
 if __name__ == '__main__':
     app.run(debug=True)
+    
