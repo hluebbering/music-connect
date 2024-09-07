@@ -121,11 +121,14 @@ def get_data():
     top_artists_url = 'https://api.spotify.com/v1/me/top/artists'
 
     top_tracks_response = requests.get(top_tracks_url, headers=headers)
-    top_artists_response = requests.get(top_artists_url, headers=headers)
+    if top_tracks_response.status_code != 200:
+        logging.error(f"Failed to fetch top tracks: {top_tracks_response.json()}")
+        return jsonify({'error': 'Failed to fetch top tracks', 'details': top_tracks_response.json()}), top_tracks_response.status_code
 
-    if top_tracks_response.status_code != 200 or top_artists_response.status_code != 200:
-        logging.error("Failed to fetch data from Spotify")
-        return jsonify({'error': 'Failed to fetch data'}), 400
+    top_artists_response = requests.get(top_artists_url, headers=headers)
+    if top_artists_response.status_code != 200:
+        logging.error(f"Failed to fetch top artists: {top_artists_response.json()}")
+        return jsonify({'error': 'Failed to fetch top artists', 'details': top_artists_response.json()}), top_artists_response.status_code
 
     top_tracks = top_tracks_response.json()
     top_artists = top_artists_response.json()
@@ -134,37 +137,11 @@ def get_data():
     genre_counts = Counter(genres)
     top_genres = genre_counts.most_common(5)  # Adjust the number to display more or fewer genres
 
-    return render_template('index.html', top_tracks=top_tracks['items'], top_artists=top_artists['items'], top_genres=top_genres)
-
-
-# @app.route('/get_data')
-# def get_data():
-#     access_token = session.get('access_token')
-#     if not access_token:
-#         logging.warning("Redirecting to login: Access token not found in session.")
-#         return redirect(url_for('login'))
-
-#     headers = {'Authorization': f'Bearer {access_token}'}
-#     top_tracks_url = 'https://api.spotify.com/v1/me/top/tracks'
-#     top_artists_url = 'https://api.spotify.com/v1/me/top/artists'
-
-#     top_tracks_response = requests.get(top_tracks_url, headers=headers)
-#     if top_tracks_response.status_code != 200:
-#         logging.error(f"Failed to fetch top tracks: {top_tracks_response.json()}")
-#         return jsonify({'error': 'Failed to fetch top tracks', 'details': top_tracks_response.json()}), top_tracks_response.status_code
-
-#     top_artists_response = requests.get(top_artists_url, headers=headers)
-#     if top_artists_response.status_code != 200:
-#         logging.error(f"Failed to fetch top artists: {top_artists_response.json()}")
-#         return jsonify({'error': 'Failed to fetch top artists', 'details': top_artists_response.json()}), top_artists_response.status_code
-
-#     top_tracks = top_tracks_response.json()
-#     top_artists = top_artists_response.json()
-
-#     return jsonify({
-#         'top_tracks': top_tracks,
-#         'top_artists': top_artists
-#     })
+    return jsonify({
+        'top_tracks': top_tracks,
+        'top_artists': top_artists,
+        'genres': top_genres
+    })
 
 
 

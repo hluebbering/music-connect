@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             const tracks = data.top_tracks.items
             const artists = data.top_artists.items
+            const genres = data.top_genres.items
 
             const tracksList = document.getElementById('top-tracks')
             tracks.forEach(track => {
@@ -22,12 +23,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 artistsList.appendChild(li)
             })
 
-            // const genresList = document.getElementById('top-genres');
-            // genres.forEach(genre => {
-            //     const li = document.createElement('li');
-            //     li.textContent = genre.name;
-            //     genresList.appendChild(li);
-            // });
+            const genresList = document.getElementById('top-genres')
+            genres.forEach(genre => {
+                const li = document.createElement('li')
+                li.textContent = genre
+                genresList.appendChild(li)
+            })
+
+
         })
         .catch(error => console.error('Error fetching data:', error))
 })
