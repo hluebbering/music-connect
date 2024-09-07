@@ -1,14 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Replace 'your-heroku-app-name' with your actual Heroku app name
-    // fetch('/get_data')
-    const backendUrl = 'https://fierce-sands-53854.herokuapp.com/get_data';
-    fetch(backendUrl)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
+    fetch('/get_data')
+        .then(response => response.json())
         .then(data => {
             const tracks = data.top_tracks.items;
             const artists = data.top_artists.items;
