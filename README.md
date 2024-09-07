@@ -8,3 +8,7 @@ heroku logs --tail --app fierce-sands-53854
 git add .
 git commit -m "Prepare for deployment to GitHub Pages"
 git push -u origin main
+
+git add .
+git commit -am "make it better"
+git push heroku main
