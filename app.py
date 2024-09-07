@@ -135,7 +135,7 @@ def get_data():
 
     genres = [genre for artist in top_artists['items'] for genre in artist['genres']]
     genre_counts = Counter(genres)
-    top_genres = genre_counts.most_common(5)  # Adjust the number to display more or fewer genres
+    top_genres = genre_counts.most_common(8)  # Adjust the number to display more or fewer genres
 
     return jsonify({
         'top_tracks': top_tracks,
