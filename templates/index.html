@@ -12,36 +12,35 @@
     <div id="data-display">
       <h2>Top Tracks</h2>
       <ul id="top-tracks">
-          {% for track in top_tracks %}
-          <li>{{ track.name }} by {{ track.artists[0].name }}</li>
-          {% endfor %}
+        {% for track in top_tracks %}
+        <li>{{ track.name }} by {{ track.artists[0].name }}</li>
+        {% endfor %}
       </ul>
 
       <h2>Top Artists</h2>
       <ul id="top-artists">
-          {% for artist in top_artists %}
-          <li>{{ artist.name }}</li>
-          {% endfor %}
+        {% for artist in top_artists %}
+        <li>{{ artist.name }}</li>
+        {% endfor %}
       </ul>
-      
+
       <h2>Your Top Genres</h2>
       <ul id="top-genres">
-          {% for genre, count in top_genres %}
-          <li>{{ genre }}: {{ count }}</li>
-          {% endfor %}
+        {% for genre, count in top_genres %}
+        <li>{{ genre }}: {{ count }}</li>
+        {% endfor %}
       </ul>
-  </div>
-  
-    
-    {# comment #}
-      <div id="data-display">
-        <h2>Top Tracks</h2>
-        <ul id="top-tracks"></ul>
-        <h2>Top Artists</h2>
-        <ul id="top-artists"></ul>
-      </div> 
-    {# endcomment #}
-      
+    </div>
+
+    {% comment %}
+    <div id="data-display">
+      <h2>Top Tracks</h2>
+      <ul id="top-tracks"></ul>
+      <h2>Top Artists</h2>
+      <ul id="top-artists"></ul>
+    </div>
+    {% endcomment %}
+
     <script src="/static/script.js"></script>
   </body>
 </html>
