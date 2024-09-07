@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    fetch('https://music-connect.herokuapp.com/get_data')
+    fetch('https://music-connect-8e0645ff1ca5.herokuapp.com/get_data')
     // fetch('/get_data')
         .then(response => response.json())
         .then(data => {

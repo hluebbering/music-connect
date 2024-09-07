@@ -144,3 +144,5 @@ heroku git:remote -a music-connect
 
 
 heroku logs --tail --app music-connect
+https://music-connect-8e0645ff1ca5.herokuapp.com/
+https://music-connect-8e0645ff1ca5.herokuapp.com/
