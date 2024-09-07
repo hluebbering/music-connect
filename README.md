@@ -1,5 +1,3 @@
-# Music-Connect
-
 ## Steps to Create Web App
 
 
@@ -73,36 +71,17 @@ Create a basic frontend -using HTML, CSS, and JavaScript- that communicates with
 1. **Push to GitHub**:
    - Push all your code to your GitHub repository, excluding sensitive credentials which should be managed through environment variables or config files.
 
+-----------------------------------
 
 
-#### Step 7: Documentation and Publishing
-1. **Document Your Project**:
-   - Write a clear `README.md` that explains what the app does, how to set it up, and how to run it.
-2. **Push to GitHub**:
-   - Push all your code to your GitHub repository, excluding sensitive credentials which should be managed through environment variables or config files.
 
-This setup creates a full-fledged project utilizing Spotify's data, and it’s great for your GitHub portfolio as it showcases your skills with APIs, Python, Flask, and basic frontend development. If you need any specific code snippets or further clarification on any step, just let me know!
+Goal. Display Spotify data using APIs, Python, Flask, and basic frontend development.
 
 
 
 
 
 
-
-
-
-Deploy the Frontend:
-Since GitHub Pages supports static sites, you’ll deploy your HTML/CSS/JavaScript files there.
-Ensure that your frontend code makes calls to the correct backend URL (your Heroku app URL).
-
-
-
-Step 7: Documentation and Publishing
-Document Your Project:
-Write a clear README.md that explains what the app does, how to set it up, and how to run it.
-Push to GitHub:
-Push all your code to your GitHub repository, excluding sensitive credentials which should be managed through environment variables or config files.
-This setup creates a full-fledged project utilizing Spotify's data, and it’s great for your GitHub portfolio as it showcases your skills with APIs, Python, Flask, and basic frontend development. If you need any specific code snippets or further clarification on any step, just let me know!
 
 heroku config:set SPOTIFY_CLIENT_ID=f7df04eeba2a41fc9b799188376b5d27
 heroku config:set SPOTIFY_CLIENT_SECRET=127da41fb0e84b958e08d7bab6807f0b
@@ -119,7 +98,6 @@ heroku config:set REDIRECT_URI="https://fierce-sands-53854-09e86a071da9.herokuap
 
 
 
-set HEROKU_API_KEY=HRKU-d42b4a33-2453-49fc-ac24-b33478894909
 set HEROKU_API_KEY=HRKU-d42b4a33-2453-49fc-ac24-b33478894909
 heroku config:set REDIRECT_URI="https://music-connect.herokuapp.com/callback" --app music-connect
 
