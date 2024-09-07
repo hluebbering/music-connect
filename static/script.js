@@ -19,6 +19,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 li.textContent = artist.name;
                 artistsList.appendChild(li);
             });
+
+            const genresList = document.getElementById('top-genres');
+            genres.forEach(genre => {
+                const li = document.createElement('li');
+                li.textContent = genre.name;
+                genresList.appendChild(li);
+            });
+
+            
         })
         .catch(error => console.error('Error fetching data:', error));
 });

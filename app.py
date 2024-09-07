@@ -6,6 +6,7 @@ import os
 from dotenv import load_dotenv
 import base64
 import logging
+from collections import Counter
 
 load_dotenv()  # Load environment variables from .env file
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -55,25 +56,11 @@ def home():
     return render_template('index.html')
 
 
-# @app.route('/')
-# def home():
-#     if 'access_token' not in session:
-#         return redirect(url_for('login'))
-#     # Fetch data
-#     data = fetch_spotify_data()  # You need to implement this function
-#     return render_template('index.html', data=data)
-
-
-
 @app.route('/login')
 def login():
     auth_url = f"https://accounts.spotify.com/authorize?client_id={CLIENT_ID}&response_type=code&redirect_uri={REDIRECT_URI}&scope=user-top-read"
     app.logger.debug(f"Redirecting to Spotify auth URL: {auth_url}")
     return redirect(auth_url)
-
-
-
-
 
 
 
@@ -117,13 +104,7 @@ def callback():
     session['refresh_token'] = token_info.get('refresh_token')
     session['token_expires_in'] = time.time() + token_info.get('expires_in')
     logging.info("Access token and refresh token successfully received and stored.")
-    
-    #access_token = token_response.json().get('access_token')
-    # session['access_token'] = access_token
-    # logging.info("Access token successfully received and stored.")
 
-    # After storing the access_token in session
-    # return redirect(url_for('display_data'))
     return redirect(url_for('home'))
 
 
@@ -153,9 +134,17 @@ def get_data():
     top_tracks = top_tracks_response.json()
     top_artists = top_artists_response.json()
 
+    # Extract genres
+    genres = [genre for artist in top_artists['items'] for genre in artist['genres']]
+
+    # Analyze genres
+    genre_counts = Counter(genres)
+    top_genres = genre_counts.most_common(5)
+
     return jsonify({
         'top_tracks': top_tracks,
-        'top_artists': top_artists
+        'top_artists': top_artists,
+        "top_genres": top_genres
     })
 
 

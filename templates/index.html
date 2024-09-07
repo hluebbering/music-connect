@@ -13,6 +13,14 @@
       <ul id="top-tracks"></ul>
       <h2>Top Artists</h2>
       <ul id="top-artists"></ul>
+      
+      <h2>Your Top Genres</h2>
+      <ul id="top-genres">
+        {% for genre, count in genres %}
+        <li>{{ genre }}: {{ count }}</li>
+        {% endfor %}
+      </ul>
+
     </div>
     <script src="/static/script.js"></script>
   </body>
