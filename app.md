@@ -87,9 +87,12 @@ Push to GitHub:
 Push all your code to your GitHub repository, excluding sensitive credentials which should be managed through environment variables or config files.
 This setup creates a full-fledged project utilizing Spotify's data, and it’s great for your GitHub portfolio as it showcases your skills with APIs, Python, Flask, and basic frontend development. If you need any specific code snippets or further clarification on any step, just let me know!
 
+heroku config:set SPOTIFY_CLIENT_ID=f7df04eeba2a41fc9b799188376b5d27
+heroku config:set SPOTIFY_CLIENT_SECRET=127da41fb0e84b958e08d7bab6807f0b
+heroku config:set REDIRECT_URI=http://localhost:5000/callback
+heroku config:set REDIRECT_URI="https://fierce-sands-53854-09e86a071da9.herokuapp.com/callback" --app your-app-name
 
-
-
+heroku config:set REDIRECT_URI="https://fierce-sands-53854-09e86a071da9.herokuapp.com/callback" --app fierce-sands-53854
 
 
 
