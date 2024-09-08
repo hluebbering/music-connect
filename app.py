@@ -8,7 +8,6 @@ from dotenv import load_dotenv
 import base64
 import logging
 from collections import Counter
-
 from spotify_data import (fetch_top_tracks_with_genres, fetch_audio_features, fetch_artist_genres,)
 from data_preprocessing import combine_track_audio_and_genres
 from clustering import perform_kmeans, recommend_songs_by_cluster
