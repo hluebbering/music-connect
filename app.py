@@ -8,7 +8,11 @@ from dotenv import load_dotenv
 import base64
 import logging
 from collections import Counter
-from spotify_data import (fetch_top_tracks_with_genres, fetch_audio_features, fetch_artist_genres,)
+from spotify_data import (
+    fetch_top_tracks_with_genres,
+    fetch_audio_features,
+    fetch_artist_genres,
+)
 from data_preprocessing import combine_track_audio_and_genres
 from clustering import perform_kmeans, recommend_songs_by_cluster
 
@@ -16,7 +20,9 @@ from clustering import perform_kmeans, recommend_songs_by_cluster
 app = Flask(__name__)
 
 load_dotenv()  # Load environment variables from .env file
-logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 app = Flask(__name__)
 app.secret_key = "ynx2ftyq"
@@ -29,14 +35,12 @@ CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 REDIRECT_URI = os.getenv("REDIRECT_URI")
 
 
-
-
 # Token refresh function
 def refresh_access_token():
     refresh_token = session.get("refresh_token")
     if not refresh_token:
         raise ValueError("No refresh token found in session.")
-    
+
     token_url = "https://accounts.spotify.com/api/token"
     client_creds = f"{CLIENT_ID}:{CLIENT_SECRET}"
     client_creds_b64 = base64.b64encode(client_creds.encode()).decode()
@@ -61,7 +65,6 @@ def refresh_access_token():
         return token_info.get("access_token")
     else:
         raise Exception(f"Failed to refresh access token: {response.json()}")
-
 
 
 @app.route("/refresh_token")
@@ -223,7 +226,6 @@ def display_data():
     return jsonify(top_tracks)
 
 
-
 @app.route("/analyze")
 def analyze_user_preferences():
     access_token = session.get("access_token") or refresh_access_token()
@@ -244,18 +246,28 @@ def analyze_user_preferences():
 
     # Perform clustering
     kmeans_model, optimal_clusters, cluster_labels = perform_kmeans(combined_data)
+    
+    # Create a mapping of track names to their respective clusters
+    track_names = [track["name"] for track in top_tracks]
+    track_clusters = {
+        track_names[i]: cluster_labels[i] for i in range(len(track_names))
+    }
 
     # Get the top 5 genres across all artists
     all_genres = [genre for genres in artist_genres.values() for genre in genres]
     top_genres = [genre for genre, _ in Counter(all_genres).most_common(6)]
 
-    return jsonify(
-        {
-            "optimal_clusters": optimal_clusters,
-            "labels": cluster_labels.tolist(),
-            "top_genres": top_genres,  # Now correctly calculates the top 6 genres
-        }
-    )
+    # Log the results for debugging purposes
+    for track, cluster in track_clusters.items():
+        logging.info(f"{track} belongs to Cluster: {cluster}")
+
+    # Prepare the response
+    detailed_output = {
+        "optimal_clusters": optimal_clusters,
+        "track_clusters": track_clusters,
+        "top_genres": top_genres,  # Now correctly calculates the top 6 genres
+    }
+    return jsonify(detailed_output)
 
 
 @app.route("/recommend")
@@ -267,25 +279,27 @@ def recommend():
 
     # Fetch data
     top_tracks = fetch_top_tracks_with_genres(access_token)
-    artist_ids = {artist_id for track in top_tracks for artist_id in track["artist_ids"]}
+    artist_ids = {
+        artist_id for track in top_tracks for artist_id in track["artist_ids"]
+    }
     artist_genres = fetch_artist_genres(access_token, list(artist_ids))
     track_ids = [track["id"] for track in top_tracks]
     audio_features = fetch_audio_features(access_token, track_ids)
 
     # Combine data
-    combined_data = combine_track_audio_and_genres(top_tracks, audio_features, artist_genres)
+    combined_data = combine_track_audio_and_genres(
+        top_tracks, audio_features, artist_genres
+    )
 
     # Perform clustering
     kmeans_model, _, cluster_labels = perform_kmeans(combined_data)
 
     # Generate recommendations for the given cluster
-    recommendations = recommend_songs_by_cluster(cluster_id, cluster_labels, combined_data)
-    
-    return jsonify({
-        'cluster_id': cluster_id,
-        'recommendations': recommendations
-    })
+    recommendations = recommend_songs_by_cluster(
+        cluster_id, cluster_labels, combined_data
+    )
 
+    return jsonify({"cluster_id": cluster_id, "recommendations": recommendations})
 
 
 if __name__ == "__main__":
