@@ -1,28 +1,59 @@
 import requests
 from flask import session
-from app import refresh_access_token  # Correctly import the function
+import base64
+import os
+
+# Your Spotify Client ID and Secret
+CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
+CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
+REDIRECT_URI = os.getenv("REDIRECT_URI")
+
+
+def refresh_access_token():
+    refresh_token = session.get("refresh_token")
+    if not refresh_token:
+        raise ValueError("No refresh token found in session.")
+
+    token_url = "https://accounts.spotify.com/api/token"
+    client_creds = f"{CLIENT_ID}:{CLIENT_SECRET}"
+    client_creds_b64 = base64.b64encode(client_creds.encode()).decode()
+
+    response = requests.post(
+        token_url,
+        data={
+            "grant_type": "refresh_token",
+            "refresh_token": refresh_token,
+            "client_id": CLIENT_ID,
+            "client_secret": CLIENT_SECRET,
+        },
+        headers={
+            "Authorization": f"Basic {client_creds_b64}",
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+    )
+
+    if response.status_code != 200:
+        raise Exception(f"Failed to refresh access token: {response.json()}")
+    token_info = response.json()
+    session["access_token"] = token_info.get("access_token")
+    return token_info.get("access_token")
 
 
 def fetch_top_tracks_with_genres(access_token):
-    
-    top_tracks_url = "https://api.spotify.com/v1/me/top/tracks?limit=50"
-    
-    # Attempt to refresh access token if it's expired or invalid
-    if not access_token:
-        access_token = refresh_access_token()
-
+    url = "https://api.spotify.com/v1/me/top/tracks"
     headers = {"Authorization": f"Bearer {access_token}"}
-    
-    response = requests.get(top_tracks_url, headers=headers)
-    
-    # If the token is expired, refresh it
+    response = requests.get(url, headers=headers)
+
     if response.status_code == 401:
-        access_token = refresh_access_token()
+        access_token = refresh_access_token()  # Token expired, refresh it
         headers = {"Authorization": f"Bearer {access_token}"}
-        response = requests.get(top_tracks_url, headers=headers)
-    
+        response = requests.get(url, headers=headers)
+
+    if response.status_code != 200:
+        raise Exception(f"Failed to fetch top tracks: {response.json()}")
+
     data = response.json()
-    
+
     if "items" not in data:
         raise KeyError(f"Expected 'items' in response but got: {data}")
 
@@ -60,6 +91,5 @@ def fetch_artist_genres(access_token, artist_ids):
     response = requests.get(artist_genres_url, headers=headers)
 
     return {
-        artist["id"]: artist.get("genres", [])
-        for artist in response.json()["artists"]
+        artist["id"]: artist.get("genres", []) for artist in response.json()["artists"]
     }
