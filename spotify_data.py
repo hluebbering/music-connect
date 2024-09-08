@@ -90,6 +90,4 @@ def fetch_artist_genres(access_token, artist_ids):
     headers = {"Authorization": f"Bearer {access_token}"}
     response = requests.get(artist_genres_url, headers=headers)
 
-    return {
-        artist["id"]: artist.get("genres", []) for artist in response.json()["artists"]
-    }
+    return {artist["id"]: artist.get("genres", []) for artist in response.json().get("artists", [])}
