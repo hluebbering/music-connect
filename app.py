@@ -224,20 +224,6 @@ def display_data():
 
 
 
-@app.route('/analyze', methods=['GET'])
-def analyze_user_preferences():
-    try:
-        access_token = session.get("access_token")
-        if not access_token:
-            access_token = refresh_access_token()  # Call directly from spotify_data.py
-        
-        top_tracks = fetch_top_tracks_with_genres(access_token)
-        # Do something with top_tracks...
-        return "Top tracks fetched successfully"
-    except Exception as e:
-        print(f"Error occurred: {e}")
-        return "An error occurred during analysis.", 500
-
 @app.route("/analyze")
 def analyze_user_preferences():
     access_token = session.get("access_token") or refresh_access_token()
