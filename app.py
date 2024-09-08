@@ -29,6 +29,9 @@ CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 REDIRECT_URI = os.getenv("REDIRECT_URI")
 
 
+
+
+# Token refresh function
 def refresh_access_token():
     refresh_token = session.get("refresh_token")
     if not refresh_token:
@@ -220,11 +223,11 @@ def display_data():
     return jsonify(top_tracks)
 
 
+
+
 @app.route("/analyze")
 def analyze_user_preferences():
-    access_token = session.get("access_token")
-    if not access_token:
-        return jsonify({"error": "Access token not found"}), 401
+    access_token = session.get("access_token") or refresh_access_token()
 
     # Fetch data
     top_tracks = fetch_top_tracks_with_genres(access_token)

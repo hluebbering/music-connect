@@ -124,3 +124,7 @@ heroku git:remote -a music-connect
 heroku logs --tail --app music-connect
 https://music-connect-8e0645ff1ca5.herokuapp.com/
 https://music-connect-8e0645ff1ca5.herokuapp.com/
+
+heroku config:set SPOTIFY_CLIENT_ID=your_spotify_client_id
+heroku config:set SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
+heroku config:set FLASK_SECRET_KEY=your_secret_key

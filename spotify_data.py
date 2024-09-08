@@ -1,10 +1,16 @@
 import requests
-
-
+from flask import session
+from app import refresh_access_token  # Correctly import the function
 
 
 def fetch_top_tracks_with_genres(access_token):
+    
     top_tracks_url = "https://api.spotify.com/v1/me/top/tracks?limit=50"
+    
+    # Attempt to refresh access token if it's expired or invalid
+    if not access_token:
+        access_token = refresh_access_token()
+
     headers = {"Authorization": f"Bearer {access_token}"}
     
     response = requests.get(top_tracks_url, headers=headers)
