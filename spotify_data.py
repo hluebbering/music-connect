@@ -1,31 +1,36 @@
 import requests
 
 
+
+
 def fetch_top_tracks_with_genres(access_token):
-    """
-    Fetch user's top tracks and the corresponding artist IDs.
-    """
     top_tracks_url = "https://api.spotify.com/v1/me/top/tracks?limit=50"
     headers = {"Authorization": f"Bearer {access_token}"}
+    
     response = requests.get(top_tracks_url, headers=headers)
+    
+    # If the token is expired, refresh it
+    if response.status_code == 401:
+        access_token = refresh_access_token()
+        headers = {"Authorization": f"Bearer {access_token}"}
+        response = requests.get(top_tracks_url, headers=headers)
+    
     data = response.json()
+    
+    if "items" not in data:
+        raise KeyError(f"Expected 'items' in response but got: {data}")
 
     top_tracks = []
-
     for track in data["items"]:
         track_info = {
             "id": track["id"],
             "name": track["name"],
-            "artists": [
-                artist["name"] for artist in track["artists"]
-            ],  # Get artist names
-            "artist_ids": [
-                artist["id"] for artist in track["artists"]
-            ],  # Collect artist IDs for genres
+            "artists": [artist["name"] for artist in track["artists"]],
+            "artist_ids": [artist["id"] for artist in track["artists"]],
         }
         top_tracks.append(track_info)
 
-    return top_tracks  # Returns track info with artist names and IDs
+    return top_tracks
 
 
 def fetch_audio_features(access_token, track_ids):

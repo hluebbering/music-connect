@@ -29,6 +29,38 @@ CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 REDIRECT_URI = os.getenv("REDIRECT_URI")
 
 
+def refresh_access_token():
+    refresh_token = session.get("refresh_token")
+    if not refresh_token:
+        raise ValueError("No refresh token found in session.")
+    
+    token_url = "https://accounts.spotify.com/api/token"
+    client_creds = f"{CLIENT_ID}:{CLIENT_SECRET}"
+    client_creds_b64 = base64.b64encode(client_creds.encode()).decode()
+
+    response = requests.post(
+        token_url,
+        data={
+            "grant_type": "refresh_token",
+            "refresh_token": refresh_token,
+            "client_id": CLIENT_ID,
+            "client_secret": CLIENT_SECRET,
+        },
+        headers={
+            "Authorization": f"Basic {client_creds_b64}",
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+    )
+
+    if response.status_code == 200:
+        token_info = response.json()
+        session["access_token"] = token_info.get("access_token")
+        return token_info.get("access_token")
+    else:
+        raise Exception(f"Failed to refresh access token: {response.json()}")
+
+
+
 @app.route("/refresh_token")
 def refresh_token():
     refresh_token = session.get("refresh_token")
