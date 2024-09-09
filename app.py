@@ -227,47 +227,50 @@ def display_data():
 
 
 @app.route("/analyze")
+@app.route("/analyze")
 def analyze_user_preferences():
     access_token = session.get("access_token") or refresh_access_token()
 
-    # Fetch data
-    top_tracks = fetch_top_tracks_with_genres(access_token)
-    artist_ids = {
-        artist_id for track in top_tracks for artist_id in track["artist_ids"]
-    }
-    artist_genres = fetch_artist_genres(access_token, list(artist_ids))
-    track_ids = [track["id"] for track in top_tracks]
-    audio_features = fetch_audio_features(access_token, track_ids)
+    try:
+        # Fetch data
+        top_tracks = fetch_top_tracks_with_genres(access_token)
+        artist_ids = {artist_id for track in top_tracks for artist_id in track["artist_ids"]}
+        artist_genres = fetch_artist_genres(access_token, list(artist_ids))
+        track_ids = [track["id"] for track in top_tracks]
+        audio_features = fetch_audio_features(access_token, track_ids)
 
-    # Combine data
-    combined_data = combine_track_audio_and_genres(
-        top_tracks, audio_features, artist_genres
-    )
+        # Combine data
+        combined_data = combine_track_audio_and_genres(top_tracks, audio_features, artist_genres)
 
-    # Perform clustering
-    kmeans_model, optimal_clusters, cluster_labels = perform_kmeans(combined_data)
-    
-    # Create a mapping of track names to their respective clusters
-    track_names = [track["name"] for track in top_tracks]
-    track_clusters = {
-        track_names[i]: cluster_labels[i] for i in range(len(track_names))
-    }
+        # Perform clustering
+        kmeans_model, optimal_clusters, cluster_labels = perform_kmeans(combined_data)
 
-    # Get the top 5 genres across all artists
-    all_genres = [genre for genres in artist_genres.values() for genre in genres]
-    top_genres = [genre for genre, _ in Counter(all_genres).most_common(6)]
+        # Create a mapping of track names to their respective clusters
+        track_names = [track["name"] for track in top_tracks]
+        track_clusters = {track_names[i]: int(cluster_labels[i]) for i in range(len(track_names))}  # Convert to int
 
-    # Log the results for debugging purposes
-    for track, cluster in track_clusters.items():
-        logging.info(f"{track} belongs to Cluster: {cluster}")
+        # Get the top 5 genres across all artists
+        all_genres = [genre for genres in artist_genres.values() for genre in genres]
+        top_genres = [genre for genre, _ in Counter(all_genres).most_common(6)]
 
-    # Prepare the response
-    detailed_output = {
-        "optimal_clusters": optimal_clusters,
-        "track_clusters": track_clusters,
-        "top_genres": top_genres,  # Now correctly calculates the top 6 genres
-    }
-    return jsonify(detailed_output)
+        # Prepare the response
+        detailed_output = {
+            "optimal_clusters": int(optimal_clusters),  # Convert to int
+            "track_clusters": track_clusters,
+            "top_genres": top_genres,
+        }
+
+        logging.info(f"Track-Cluster Mapping: {track_clusters}")
+
+        return jsonify(detailed_output)
+
+    except KeyError as e:
+        logging.error(f"KeyError: {e} occurred while analyzing user preferences")
+        return jsonify({"error": f"Missing key in the response: {e}"}), 500
+
+    except Exception as e:
+        logging.error(f"Exception: {e} occurred while analyzing user preferences")
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/recommend")
